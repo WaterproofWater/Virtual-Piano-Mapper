@@ -30,11 +30,27 @@ app.post("/songs", async (request, response) => {  // URL for song list: http://
 
         const song = await Song.create(newSong);
 
-        return response.status(201).send(book);
+        return response.status(201).send(song);
     }
     catch (error){
         console.log(error.message);
         response.status(500).send({message: error.message});
+    }
+});
+
+// Route to retrieve all songs in the DB
+app.get("/songs", async (request, response) => {  // URL for song list: http://localhost:5988/songs
+    try {
+        const songs = await Song.find({});
+
+        return response.status(200).json({
+            count: songs.length,
+            data: songs
+        });
+    }
+    catch (error){
+        console.log(error.message);
+        resopnse.status(500).send({message: error.message});
     }
 });
 
