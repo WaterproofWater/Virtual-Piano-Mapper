@@ -11,11 +11,7 @@ const app = express();
 // Stop: Hold Ctrl and then C
 
 app.use(express.json());
-app.use(cors({
-    origin: "http://localhost:5988",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type"]
-}));
+app.use(cors());
 
 app.get("/", (request, response) => {
     console.log(request);
