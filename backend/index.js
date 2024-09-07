@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import songsRoute from "./routes/songRoute.js";
+import cors from "cors";
 
 const PORT = 5988;
 const MONGO_DB_URL = "mongodb+srv://root:rootpass@song-notes-db.lp1nq.mongodb.net/?retryWrites=true&w=majority&appName=Song-Notes-DB"
@@ -10,6 +11,11 @@ const app = express();
 // Stop: Hold Ctrl and then C
 
 app.use(express.json());
+app.use(cors({
+    origin: "http://localhost:5988",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"]
+}));
 
 app.get("/", (request, response) => {
     console.log(request);
