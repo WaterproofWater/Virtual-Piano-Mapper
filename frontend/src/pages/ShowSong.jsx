@@ -25,7 +25,8 @@ const ShowSong = () => {
     return (
         <div className='p-4'>
             <BackButton />
-            <h1 className='text-3xl my-4'> Show Book </h1>
+            <h1 className='text-3xl my-4'> Song Info: </h1>
+
             {loading ? (
                 <Spinner />
             ) : (
@@ -43,6 +44,11 @@ const ShowSong = () => {
                     <div className='my-4'>
                         <span className='text-xl mr-4 text-gray-600'> Author: </span>
                         <span className='text-xl mr-4 text-gray-600'> {song.author} </span>
+                    </div>
+
+                    <div className='my-4'>
+                        <span className='text-xl mr-4 text-gray-600'> Notes: </span>
+                        <span className='text-xl mr-4 text-gray-600'> {song.notes} </span>
                     </div>
 
                     <div className='my-4'>
