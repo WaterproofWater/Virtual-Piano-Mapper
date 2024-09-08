@@ -17,6 +17,7 @@ const CreateSong = () => {
       alert("All of tile, author, and notes fields are required.");
       return;
     }
+    
     setLoading(true);
     axios.post(`http://localhost:5988/songs`, data).then(() => {
       setLoading(false);
