@@ -69,4 +69,4 @@ const EditSong = () => {
   )
 }
 
-export default EditSong
+export default EditSong;
