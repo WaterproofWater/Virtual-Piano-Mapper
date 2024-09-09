@@ -5,10 +5,13 @@ import { Link } from 'react-router-dom';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { BsInfoCircle } from 'react-icons/bs';
 import { MdOutlineAddBox, MdOutlineDelete } from 'react-icons/md';
+import CardView from '../components/home/CardView';
+import TableView from '../components/home/TableView';
 
 const Home = () => {
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [viewType, setViewType] = useState('table');
 
   useEffect(() => {
     setLoading(true);
@@ -25,6 +28,12 @@ const Home = () => {
 
   return (
     <div className='p-4'>
+
+      <div className='flex justify-center items-center gap-x-4'>
+        <button className='bg-gray-700 hover:bg-gray-500 px-4 py-1 rounded-lg text-white' onClick={() => setViewType('table')}> Table </button>
+        <button className='bg-gray-700 hover:bg-gray-500 px-4 py-1 rounded-lg text-white' onClick={() => setViewType('card')}> Card </button>
+      </div>
+
       <div className='flex justify-between items-center'>
         <h1 className='text-3xl my-8'> Song List </h1>
         <Link to='/songs/create'>
@@ -35,40 +44,11 @@ const Home = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <table className='w-full border-separate border-spacing-2'>
-          <thead>
-            <tr>
-              <th className='border border-slate-600 rounded-md'> No. </th>
-              <th className='border border-slate-600 rounded-md w-1/6'> Author </th>
-              <th className='border border-slate-600 rounded-md w-4/6'> Title </th>
-              <th className='border border-slate-600 w-1/4'> Operations </th>
-            </tr>
-          </thead>
-          <tbody>
-            {songs.map((song, index) => {
-              return (
-                <tr key={song._id} className='h-8'>
-                  <td className='border border-slate-800 rounded-md text-center'> {index + 1} </td>
-                  <td className='border border-slate-800 rounded-md text-center'> {song.author} </td>
-                  <td className='border border-slate-800 rounded-md text-center'> {song.title} </td>
-                  <td className='border border-slate-800 rounded-md text-center max-md:hidden'>
-                    <div className='flex justify-center gap-x-4'>
-                      <Link to={`/songs/details/${song._id}`}>
-                        <BsInfoCircle className='text-2xl text-green-700' />
-                      </Link>
-                      <Link to={`/songs/edit/${song._id}`}>
-                        <AiOutlineEdit className='text-2xl text-yellow-700' />
-                      </Link>
-                      <Link to={`/songs/delete/${song._id}`}>
-                        <MdOutlineDelete className='text-2xl text-red-700' />
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        viewType === 'table' ? (
+          <TableView songs={songs} />
+        ) : (
+          <CardView songs={songs} />
+        )
       )}
     </div>
   );
