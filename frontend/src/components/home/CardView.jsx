@@ -24,17 +24,17 @@ const CardView = ({ songs }) => {
           className='border-2 border-gray-500 rounded-lg px-4 py-2 m-4 relative hover:shadow-lg'
           key={item._id}
         >
-          <h4 className='my-2 text-gray-400'> {item._id} </h4>
-          <h2 className='absolute top-1 right-2 px-4 py-1 bg-gray-500 rounded-lg'>
-            {item.notes}
+            
+          <h2 className='absolute top-1 right-2 px-4 py-1 bg-gray-500 rounded-lg text-gray-100'>
+            {item._id}
           </h2>
-          <div className='flex justify-start items-center gap-x-2'>
-            <MdMusicNote className='text-red-300 text-2xl' />
-            <h2 className='my-1'> {item.title} </h2>
-          </div>
+          <div className='flex justify-start items-center gap-x-2 mt-10'>
+            <MdMusicNote className='text-red-300 text-2xl flex-shrink-0' /> 
+            <h2 className='my-1 w-full truncate text-xl'> {item.title} </h2> 
+        </div>
           <div className='flex justify-start items-center gap-x-2'>
             <BiUserCircle className='text-red-300 text-2xl' />
-            <h2 className='my-1'> {item.author} </h2>
+            <h2 className='my-1 text-sm'> {item.author} </h2>
           </div>
           <div className='flex justify-between items-center gap-x-2 mt-4 p-4'>
             <BiShow
