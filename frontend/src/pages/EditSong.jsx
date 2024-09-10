@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
+import { useSnackbar } from 'notistack';
 
 const EditSong = () => {
   const [title, setTitle] = useState('');
@@ -11,6 +12,7 @@ const EditSong = () => {
   const [loading, setLoading] = useState(false);
   const id = useParams().id;
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     setLoading(true);
@@ -21,8 +23,7 @@ const EditSong = () => {
       setLoading(false);
     }).catch((error) => {
       setLoading(false);
-      alert('Error: Song edit failed, please check console.');
-      console.log(error);
+      enqueueSnackbar("Error: Song info failed to retrieve, please check console!", { variant: "error"}, { style: { backgroundColor: 'red', color: 'white' }});
     })
   }, [])
 
@@ -35,10 +36,11 @@ const EditSong = () => {
     setLoading(true);
     axios.put(`http://localhost:5988/songs/${id}`, data).then(() => {
       setLoading(false);
+      enqueueSnackbar("Song edited successfuly!", { variant: "success"});
       navigate('/');
     }).catch((error) => {
       setLoading(false);
-      alert('Error: Song creation failed, please check console.');
+      enqueueSnackbar("Error: Song edit failed, please check console!", { variant: "error", style: { backgroundColor: 'red', color: 'white' }});
       console.log(error);
     });
   }

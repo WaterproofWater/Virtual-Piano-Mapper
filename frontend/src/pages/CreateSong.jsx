@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
+import { useSnackbar } from 'notistack';
 
 const CreateSong = () => {
   const [title, setTitle] = useState('');
@@ -11,6 +12,7 @@ const CreateSong = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const notesRef = useRef(null); 
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSaveSong = () => {
     const data = { title, author, notes };
@@ -22,10 +24,11 @@ const CreateSong = () => {
     setLoading(true);
     axios.post(`http://localhost:5988/songs`, data).then(() => {
       setLoading(false);
+      enqueueSnackbar("Song created successfuly!", { variant: "success"});
       navigate('/');
     }).catch((error) => {
       setLoading(false);
-      alert('Error: Song creation failed, please check console.');
+      enqueueSnackbar("Error: Song creation failed, please check console!", { variant: "error", style: { backgroundColor: 'red', color: 'white' }});
       console.log(error);
     });
   };

@@ -3,20 +3,23 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
+import { useSnackbar } from 'notistack';
 
 const DeleteSong = () => {
   const [loading, setLoading] = useState(false);
   const id = useParams().id;
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleDeleteSong = () => {
     setLoading(true);
     axios.delete(`http://localhost:5988/songs/${id}`).then(() => {
       setLoading(false);
       navigate('/');
+      enqueueSnackbar("Song deleted successfuly!", { variant: "success"});
     }).catch((error) => {
       setLoading(false);
-      alert('Error: Song deletion failed, please check console.');
+      enqueueSnackbar("Error: Song deletion failed, please check console!", { variant: "error", style: { backgroundColor: 'red', color: 'white' }});
       console.log(error);
     });
   }
