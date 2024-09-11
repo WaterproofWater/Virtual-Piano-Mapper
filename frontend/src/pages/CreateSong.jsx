@@ -93,7 +93,7 @@ const CreateSong = () => {
           />
         </div>
 
-        <button className='p-2 bg-sky-950 m-8 text-white' onClick={handleSaveSong}> Save </button>
+        <button className='p-2 bg-blue-600 m-8 text-white' onClick={handleSaveSong}> Save </button>
       </div>
     </div>
   );

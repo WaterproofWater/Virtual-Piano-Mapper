@@ -5,6 +5,7 @@ import CreateSong from "./pages/CreateSong.jsx"
 import ShowSong from "./pages/ShowSong.jsx"
 import EditSong from "./pages/EditSong.jsx"
 import DeleteSong from "./pages/DeleteSong.jsx"
+import MapSong from "./pages/MapSong.jsx";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <Route path = "/songs/details/:id" element={<ShowSong />} /> 
       <Route path = "/songs/edit/:id" element={<EditSong />} /> 
       <Route path = "/songs/delete/:id" element={<DeleteSong />} /> 
+      <Route path = "/songs/map/:id" element={<MapSong />} /> 
     </Routes>
   )
 }

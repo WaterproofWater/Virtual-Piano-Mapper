@@ -86,7 +86,7 @@ router.put("/:id", async (request, response) => {
 });
 
 // Route to favorite/unfavorite a song
-router.put('/songs/:id', async (req, res) => {
+router.put('/songs/:id', async (req, res) => {  // URL for song list: http://localhost:5988/songs
     try {
       const song = await Song.findByIdAndUpdate(req.params.id, req.body, { new: true });
       res.json(song);

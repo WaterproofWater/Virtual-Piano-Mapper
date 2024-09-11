@@ -5,7 +5,7 @@ import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 import { useSnackbar } from 'notistack';
 
-const EditSong = () => {
+const MapSong = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [notes, setNotes] = useState('');
@@ -20,45 +20,29 @@ const EditSong = () => {
     axios
       .get(`http://localhost:5988/songs/${id}`)
       .then((response) => {
-        const { title, author, notes, favorited } = response.data;
-        setTitle(title);
-        setAuthor(author);
-        setNotes(notes);
-        setFavorited(favorited);
-        setLoading(false);
+        setNotes(response.notes);
       })
       .catch((error) => {
         setLoading(false);
-        enqueueSnackbar("Error: Song info failed to retrieve, please check console!", { variant: "error" });
+        enqueueSnackbar("Error: Song notes failed to retrieve, please check console!", { variant: "error" });
         console.error(error);
       });
   }, [id, enqueueSnackbar]);
 
-  const handleEditSong = () => {
-    const data = { title, author, notes, favorited };
-    if (!title || !author || !notes) {
-      alert("All of title, author, and notes fields are required.");
+  const handleMapSong = () => {
+    if (!notes) {
+      alert("This song have no notes!");
       return;
     }
     setLoading(true);
-    axios
-      .put(`http://localhost:5988/songs/${id}`, data)
-      .then(() => {
-        setLoading(false);
-        enqueueSnackbar("Song edited successfully!", { variant: "success" });
-        navigate('/');
-      })
-      .catch((error) => {
-        setLoading(false);
-        enqueueSnackbar("Error: Song edit failed, please check console!", { variant: "error" });
-        console.error(error);
-      });
+    console.log("at mapping logic.");
+    navigate('/');
   };
 
   return (
     <div className='p-4'>
       <BackButton />
-      <h1 className='text-3xl my-4'> Song Edit: </h1>
+      <h1 className='text-3xl my-4'> Song Mapper: </h1>
 
       {loading ? <Spinner /> : null}
       <div className='flex flex-col border-2 border-sky-400 rounded-xl w-[600px] p-4 mx-auto'>
@@ -100,12 +84,12 @@ const EditSong = () => {
           />
         </div>
 
-        <button className='p-2 bg-blue-600 m-8 text-white transition' onClick={handleEditSong}>
-          Save
+        <button className='p-2 bg-blue-600 m-8 text-white transition' onClick={handleMapSong}>
+          Map to AutoHotKey Script
         </button>
       </div>
     </div>
   );
 };
 
-export default EditSong;
+export default MapSong;

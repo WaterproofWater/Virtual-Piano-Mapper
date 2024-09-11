@@ -1,7 +1,8 @@
 import React from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
-import { MdMusicNote } from 'react-icons/md';
+import { MdMusicNote, MdPiano } from 'react-icons/md';
 import { BiUserCircle } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
 
 const SongModal = ({ song, onClose }) => {
   return (
@@ -31,11 +32,21 @@ const SongModal = ({ song, onClose }) => {
         <h2 className='text-lg font-semibold mb-2 pt-3'> Song notes: </h2>
         
         <div 
-          className='p-4 bg-gray-200 rounded-xl w-full max-h-[700px] overflow-y-auto custom-scrollbar' 
+          className='p-4 bg-gray-200 rounded-xl w-full max-h-[500px] overflow-y-auto custom-scrollbar' 
           style={{ whiteSpace: 'pre-wrap' }}
         >
           <p className='text-gray-700 break-words'> {song.notes} </p>
         </div>
+
+        <div className='flex justify-center mt-4'>
+          <Link to={`/songs/map/${song._id}`}>
+            <button className='flex items-center gap-2 bg-sky-900 text-white px-4 py-2 rounded-full hover:bg-sky-700 transition'>
+              <MdPiano className='text-white text-2xl' />
+              <span> Map Song to Piano </span>
+            </button>
+          </Link>
+        </div>
+
       </div>
     </div>
   );
