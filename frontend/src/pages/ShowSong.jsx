@@ -5,7 +5,7 @@ import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 
 const ShowSong = () => {
-    const [song, setSong] = useState([]);
+    const [song, setSong] = useState({});
     const [loading, setLoading] = useState(false);
     const id = useParams().id; 
 
@@ -20,7 +20,7 @@ const ShowSong = () => {
             console.log(error);
             setLoading(false);
           });
-      }, []);
+      }, [id]);
 
     return (
         <div className='p-4'>
@@ -34,6 +34,11 @@ const ShowSong = () => {
                     <div className='my-4'>
                         <span className='text-xl mr-4 text-gray-600'> ID: </span>
                         <span className='text-xl mr-4 text-gray-600'> {song._id} </span>
+                    </div>
+                    
+                    <div className='my-4'>
+                        <span className='text-xl mr-4 text-gray-600'> Favorited: </span>
+                        <span className='text-xl mr-4 text-gray-600'> {song.favorited?.toString()} </span>
                     </div>
 
                     <div className='my-4'>

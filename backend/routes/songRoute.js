@@ -77,13 +77,25 @@ router.put("/:id", async (request, response) => {
     }
     catch (error) {
         if (error.name === "CastError") {
-            return response.status(400).json({ message: "Error: Invalid song ID format" });
+            return response.status(400).json({ message: "Error: Invalid song ID format." });
         }
         
         console.log(error.message);
         response.status(500).send({message: error.message});
     }
 });
+
+// Route to favorite/unfavorite a song
+router.put('/songs/:id', async (req, res) => {
+    try {
+      const song = await Song.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      res.json(song);
+    } 
+    catch (error) {
+      res.status(500).json({ message: 'Error: Favorite status update failed to update.' });
+    }
+  });
+  
 
 // Route to deleted a target song in the DB
 router.delete("/:id", async (request, response) => {  // URL for song list: http://localhost:5988/songs
