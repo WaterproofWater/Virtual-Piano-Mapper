@@ -7,6 +7,8 @@ import { useSnackbar } from 'notistack';
 import { MdMusicNote } from 'react-icons/md';
 import { BiUserCircle } from 'react-icons/bi';
 import pianoKeys from '../components/images/piano-keys.png';
+import MapModal from '../../mapper/MapModal';
+import NotesMapper from '../../mapper/NotesMapper';
 
 const MapSong = () => {
   const [title, setTitle] = useState('');
@@ -16,7 +18,7 @@ const MapSong = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [keyMapping, setKeyMapping] = useState({
+  const [keyMap, setKeyMap] = useState({
     c1: '', d1: '', e1: '', f1: '', g1: '', a1: '', b1: '', C1: '', D1: '', F1: '', G1: '', A1: '',
     c2: '', d2: '', e2: '', f2: '', g2: '', a2: '', b2: '', C2: '', D2: '', F2: '', G2: '', A2: '',
     c3: '', d3: '', e3: '', f3: '', g3: '', a3: '', b3: '', C3: '', D3: '', F3: '', G3: '', A3: '',
@@ -24,6 +26,15 @@ const MapSong = () => {
     c5: '', d5: '', e5: '', f5: '', g5: '', a5: '', b5: '', C5: '', D5: '', F5: '', G5: '', A5: '',
     c6: '', d6: '', e6: '', f6: '', g6: '', a6: '', b6: '', C6: '', D6: '', F6: '', G6: '', A6: ''
   });
+  const [activeSong, setActiveSong] = useState(null);
+
+  const openModal = (song) => {
+    setActiveSong(song);
+  };
+
+  const closeModal = () => {
+    setActiveSong(null);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -45,22 +56,10 @@ const MapSong = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setKeyMapping((prevMapping) => ({
+    setKeyMap((prevMapping) => ({
       ...prevMapping,
       [name]: value
     }));
-
-    console.log(keyMapping);
-  };
-
-  const handleMapSong = (event) => {
-    event.preventDefault();
-    if (!notes) {
-      alert("This song has no notes!");
-      return;
-    }
-    setLoading(true);
-    console.log("Mapping Logic with keyMapping:", keyMapping);
   };
 
   const renderOctaveInputs = (octave) => {
@@ -73,7 +72,7 @@ const MapSong = () => {
             key={`${key}${octave}`}
             type="text"
             name={`${key}${octave}`}
-            value={keyMapping[`${key}${octave}`]}
+            value={keyMap[`${key}${octave}`]}
             onChange={handleChange}
             className="border-2 border-gray-400 p-1 rounded-lg text-center w-12"
             maxLength="1"
@@ -82,6 +81,15 @@ const MapSong = () => {
         ))}
       </div>
     );
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const mapData = { notes, keyMap };
+    const AHKScript = NotesMapper(mapData);
+    console.log(AHKScript);
+    const songData = { title, author, AHKScript };
+    openModal(songData);
   };
 
   return (
@@ -119,7 +127,7 @@ const MapSong = () => {
 
         <hr className="my-4 border-gray-500" />
 
-        <form onSubmit={handleMapSong} className="flex flex-col items-center">
+        <form onSubmit={handleSubmit} className="flex flex-col items-center">
           <h2 className="text-lg font-semibold mb-2"> Map Piano Keys to PC Keys (be sure that they are all unique!) </h2>
 
           <div className="space-y-5">
@@ -136,6 +144,7 @@ const MapSong = () => {
           </button>
         </form>
       </div>
+      {activeSong && <MapModal song={activeSong} onClose={closeModal} />}
     </div>
   );
 };
