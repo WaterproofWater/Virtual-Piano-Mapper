@@ -1,30 +1,11 @@
 const NotesMapper = (data) => {
     const { notes, keyMap } = data;
 
-    let script = `paused := true
-    
-]:: 
-    paused := !paused 
-    if (paused) 
-    { 
-        Suspend 
-    } 
-    else 
-    { 
-        Suspend, Off 
-    } 
-return 
-
-[:: 
-    Suspend 
+    let script = `*[:: 
     Reload 
-return 
+    return
 
-; Main loop logic 
-Loop 
-{ 
-    if (!paused) 
-    {\n`;
+*]::\n`;
      
     let waitTime = 0;  
 
@@ -49,9 +30,9 @@ Loop
 
                 if (mappedKey) {
                     if (waitTime > 0) {
-                        script += `        sleep, ${waitTime}\n`;
+                        script += `    sleep, ${waitTime}\n`;
                     }
-                    script += `        send, ${mappedKey}\n`;
+                    script += `    send, ${mappedKey}\n`;
                     waitTime = 0;
                 }
                 else {
@@ -61,12 +42,7 @@ Loop
         }
     }
 
-    script += `    }
-    else
-    {
-        Sleep, 100
-    }
-}`;
+    script += `    reload`;
 
     console.log(script);
 
