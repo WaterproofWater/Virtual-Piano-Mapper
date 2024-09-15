@@ -57,10 +57,17 @@ const NotesMapper = (data) => {
                 const note = notes[i];
 
                 if (note !== '-') {
-                    mergedNotes += `${note}${octave}`;
+                    if (octave === previousOctave) {
+                        mergedNotes += `*${note}${octave}`;
+                    } 
+                    else {
+                        mergedNotes += `${note}${octave}`;
+                        previousOctave = octave;  // Update previous octave for comparison
+                    }
                 } 
                 else {
                     mergedNotes += '-';
+                    previousOctave = '';
                 }
             }
 
@@ -118,7 +125,7 @@ const NotesMapper = (data) => {
         const char = mergedFinalLine[i];
 
         if (char === '-') {
-            waitTime += 167;
+            waitTime += 140;
             continue;
         }
 
@@ -151,7 +158,8 @@ const NotesMapper = (data) => {
         }
     }
     
-    script += `    reload`;
+    script += `    reload
+        reload`;
 
     return script;
 };
