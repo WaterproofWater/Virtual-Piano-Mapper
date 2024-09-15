@@ -60,7 +60,8 @@ const NotesMapper = (data) => {
     
                 mergedLines[index] = mergedNotes;
     
-            } else if (Array.isArray(line)) {
+            } 
+            else if (Array.isArray(line)) {
                 let mergedNotes = '';
                 const notesArray = line.map(l => l.split('|')[1]); // Get notes part from each line
                 const octavesArray = line.map(l => l.split('|')[0]); // Get octaves from each line
@@ -90,49 +91,46 @@ const NotesMapper = (data) => {
     processMergedLines(mergedLines);
     console.log("Merged Lines:", mergedLines);
 
-
+    let mergedFinalLine = '';
     for (let line of mergedLines) {
-        let waitTime = 0;
-    
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-    
-            // Handle delays for every dash
-            if (char === '-') {
-                waitTime += 140;
-                continue;
-            }
-    
-            // We expect a note followed by its octave, so skip handling any other non-note character
-            if (i + 1 < line.length && !isNaN(line[i + 1])) {
-                const note = char;        // The current character is the note
-                const octave = line[i + 1]; // The next character is the octave
-    
-                const noteKey = `${note}${octave}`;
-                const mappedKey = keyMap[noteKey];
-    
-                if (mappedKey) {
-                    // Apply the accumulated wait time before the note
-                    if (waitTime > 0) {
-                        script += `    sleep, ${waitTime}\n`;
-                        waitTime = 0;
-                    }
-    
-                    // Send the key for the note
-                    script += `    send, ${mappedKey}\n`;
-    
-                    // Skip the octave character since it was just processed
-                    i += 1; 
-                } else {
-                    console.log(`Note ${noteKey} not found in keyMap`);
+        mergedFinalLine += line;
+    }
+
+    // Main mapping logic
+    for (let i = 0; i < mergedFinalLine.length; i++) {
+        const char = mergedFinalLine[i];
+
+        if (char === '-') {
+            waitTime += 140;
+            continue;
+        }
+
+        else {
+            const note = char;                      // The current character is the note
+            const octave = mergedFinalLine[i + 1];  // The next character is the octave
+
+            const noteKey = `${note}${octave}`;
+            const mappedKey = keyMap[noteKey];
+
+            if (mappedKey) {
+                if (waitTime > 0) {
+                    script += `    sleep, ${waitTime}\n`;
+                    waitTime = 0;
                 }
-            } else {
-                console.log(`Invalid note or octave format at position ${i}: ${char}`);
+
+                script += `    send, ${mappedKey}\n`;
+
+                // Skip the octave character since it was just processed
+            } 
+            else {
+                console.log(`Note ${noteKey} not found in keyMap`);
             }
+
+            i += 1; 
+
         }
     }
     
-
     script += `    reload`;
 
     return script;
