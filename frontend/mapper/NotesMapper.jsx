@@ -29,11 +29,13 @@ const NotesMapper = (data) => {
                 }
                 mergeGroup = [];
             }
-        } else {
+        } 
+        else {
             mergeGroup.push(currentLine);
         }
     }
     
+    // Last note line merge (if necessary)
     if (mergeGroup.length > 0) {
         if (mergeGroup.length === 1) {
             mergedLines.push(mergeGroup[0]);
@@ -43,52 +45,67 @@ const NotesMapper = (data) => {
         }
     }
 
-    const processMergedLines = (mergedLines) => {
-        mergedLines.forEach((line, index) => {
-            if (typeof line === 'string') {
-                const [octave, notes] = line.split('|');
-                let mergedNotes = '';
-    
-                for (let i = 0; i < notes.length; i++) {
-                    const note = notes[i];
-                    if (note !== '-') {
-                        mergedNotes += `${note}${octave}`;
-                    } else {
-                        mergedNotes += '-';
-                    }
+
+
+    let previousOctave = '';
+    mergedLines.forEach((line, index) => {
+        if (typeof line === 'string') {
+            const [octave, notes] = line.split('|');
+            let mergedNotes = '';
+
+            for (let i = 0; i < notes.length; i++) {
+                const note = notes[i];
+
+                if (note !== '-') {
+                    mergedNotes += `${note}${octave}`;
+                } 
+                else {
+                    mergedNotes += '-';
                 }
-    
-                mergedLines[index] = mergedNotes;
-    
-            } 
-            else if (Array.isArray(line)) {
-                let mergedNotes = '';
-                const notesArray = line.map(l => l.split('|')[1]); // Get notes part from each line
-                const octavesArray = line.map(l => l.split('|')[0]); // Get octaves from each line
-    
-                const maxLength = Math.max(...notesArray.map(notes => notes.length));
-    
-                for (let i = 0; i < maxLength; i++) {
-                    let combinedNote = '';
-    
-                    for (let j = 0; j < notesArray.length; j++) {
-                        const note = notesArray[j][i] || '-';
-                        const octave = octavesArray[j];
-    
-                        if (note !== '-') {
+            }
+
+            mergedLines[index] = mergedNotes;
+
+        } 
+        else if (Array.isArray(line)) {
+            let mergedNotes = '';
+            const notesArray = line.map(l => l.split('|')[1]);   // Get notes part from each line
+            const octavesArray = line.map(l => l.split('|')[0]); // Get octaves from each line
+        
+            const maxLength = Math.max(...notesArray.map(notes => notes.length));
+        
+            for (let i = 0; i < maxLength; i++) {
+                let combinedNote = '';
+        
+                for (let j = 0; j < notesArray.length; j++) {
+                    const note = notesArray[j][i] || '-';
+                    const octave = octavesArray[j];
+        
+                    if (note !== '-') {
+                        if (octave === previousOctave) {
+                            combinedNote += `*${note}${octave}`;
+                        } 
+                        else {
                             combinedNote += `${note}${octave}`;
                         }
+                        previousOctave = octave;  // Update previous octave for comparison
                     }
-    
-                    mergedNotes += combinedNote || '-';
                 }
-    
-                mergedLines[index] = mergedNotes;
+        
+                if (combinedNote == '') {
+                    previousOctave = '';
+                }
+                mergedNotes += combinedNote || '-';
             }
-        });
-    };
+        
+            mergedLines[index] = mergedNotes;
+        }
+        
+        
+        
+        
+    });
 
-    processMergedLines(mergedLines);
     console.log("Merged Lines:", mergedLines);
 
     let mergedFinalLine = '';
@@ -101,8 +118,12 @@ const NotesMapper = (data) => {
         const char = mergedFinalLine[i];
 
         if (char === '-') {
-            waitTime += 140;
+            waitTime += 167;
             continue;
+        }
+
+        else if (char === '*') {
+            script += `    sleep, 50\n`;
         }
 
         else {
@@ -119,13 +140,12 @@ const NotesMapper = (data) => {
                 }
 
                 script += `    send, ${mappedKey}\n`;
-
-                // Skip the octave character since it was just processed
             } 
-            else {
-                console.log(`Note ${noteKey} not found in keyMap`);
-            }
+            // else {
+            //     console.log(`Note ${noteKey} not found in keyMap`);
+            // }
 
+            // Skip the octave character since it was just processed
             i += 1; 
 
         }

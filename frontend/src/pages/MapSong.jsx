@@ -87,7 +87,6 @@ const MapSong = () => {
     event.preventDefault();
     const mapData = { notes, keyMap };
     const AHKScript = NotesMapper(mapData);
-    console.log(AHKScript);
     const songData = { title, author, AHKScript };
     openModal(songData);
   };
