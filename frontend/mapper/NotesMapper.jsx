@@ -146,11 +146,11 @@ const NotesMapper = (data) => {
                     waitTime = 0;
                 }
 
-                script += `    send, ${mappedKey}\n`;
+                script += `    send, {${mappedKey}}\n`;
             } 
-            // else {
-            //     console.log(`Note ${noteKey} not found in keyMap`);
-            // }
+            else {
+                console.log(`Note ${noteKey} not found in keyMap`);
+            }
 
             // Skip the octave character since it was just processed
             i += 1; 
@@ -159,7 +159,7 @@ const NotesMapper = (data) => {
     }
     
     script += `    reload
-        reload`;
+    return`;
 
     return script;
 };
