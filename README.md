@@ -9,7 +9,7 @@ The Virtual Piano Mapper project is designed to automate piano playing by conver
 4. Move to the frontend folder and install the required dependencies using __npm install__.
 5. Navigate to the backend directory and start the server using __npm run dev__.
 6. Move to the frontend directory and start the development server using __npm run dev__.
-7. Go to the local host address given by the front end's server to start using the program.
+7. Go to the local host address given by the front end's server to start using the program (__http://localhost:5173/__ by default).
 
 
 <sub> The project's main purpose is largely finished, but many more add-ons functions and improvements are planned for future development </sub>
