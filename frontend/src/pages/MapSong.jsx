@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 import { useSnackbar } from 'notistack';
@@ -16,7 +16,6 @@ const MapSong = () => {
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
-  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [keyMap, setKeyMap] = useState({
     c1: '', d1: '', e1: '', f1: '', g1: '', a1: '', b1: '', C1: '', D1: '', F1: '', G1: '', A1: '',

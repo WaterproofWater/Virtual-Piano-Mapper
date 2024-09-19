@@ -35,7 +35,7 @@ const NotesMapper = (data) => {
         }
     }
     
-    // Last note line merge (if necessary)
+    // Last line merge (if necessary)
     if (mergeGroup.length > 0) {
         if (mergeGroup.length === 1) {
             mergedLines.push(mergeGroup[0]);
@@ -45,8 +45,7 @@ const NotesMapper = (data) => {
         }
     }
 
-
-
+    // Small delay for repeating octave
     let previousOctave = '';
     mergedLines.forEach((line, index) => {
         if (typeof line === 'string') {
@@ -62,7 +61,7 @@ const NotesMapper = (data) => {
                     } 
                     else {
                         mergedNotes += `${note}${octave}`;
-                        previousOctave = octave;  // Update previous octave for comparison
+                        previousOctave = octave;
                     }
                 } 
                 else {
@@ -95,7 +94,7 @@ const NotesMapper = (data) => {
                         else {
                             combinedNote += `${note}${octave}`;
                         }
-                        previousOctave = octave;  // Update previous octave for comparison
+                        previousOctave = octave; 
                     }
                 }
         
@@ -113,6 +112,7 @@ const NotesMapper = (data) => {
         
     });
 
+    // Troubleshoot section
     console.log("Merged Lines:", mergedLines);
 
     let mergedFinalLine = '';
