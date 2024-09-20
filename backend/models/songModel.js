@@ -14,6 +14,10 @@ const songSchema = mongoose.Schema(
         type: String,
         required: true,
       },
+      keyMap: {
+        type: Map,
+        of: String,
+      },
       favorited: {
         type: Boolean,
         default: false, 

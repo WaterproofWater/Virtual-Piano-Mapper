@@ -57,6 +57,22 @@ const ShowSong = () => {
                     </div>
 
                     <div className='my-4'>
+                        <span className='text-xl mr-4 text-gray-600'> Key Map: </span>
+                        {song.keyMap ? (
+                            <div>
+                            {Object.entries(song.keyMap).map(([note, key]) => (
+                                <div key={note} className="flex items-center">
+                                <span className='mr-2'>{note}:</span>
+                                <span>{key || '-'}</span>
+                                </div>
+                            ))}
+                            </div>
+                        ) : (
+                            <span className='text-xl text-gray-600'> No key map available </span>
+                        )}
+                    </div>
+
+                    <div className='my-4'>
                         <span className='text-xl mr-4 text-gray-600'> Creation Time: </span>
                         <span className='text-xl mr-4 text-gray-600'> {new Date(song.createdAt).toString()} </span>
                     </div>

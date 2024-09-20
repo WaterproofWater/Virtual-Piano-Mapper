@@ -42,10 +42,13 @@ const MapSong = () => {
     axios
       .get(`http://localhost:5988/songs/${id}`)
       .then((response) => {
-        const { title, author, notes } = response.data;
+        const { title, author, notes, keyMap } = response.data;
         setTitle(title);
         setAuthor(author);
         setNotes(notes);
+        if (keyMap) {
+          setKeyMap(keyMap);
+        }
         setLoading(false);
       })
       .catch((error) => {
@@ -54,18 +57,6 @@ const MapSong = () => {
         console.error(error);
       });
   }, [id, enqueueSnackbar]);
-
-  // Store previous keybind section
-  useEffect(() => {
-    const savedKeyMap = localStorage.getItem('keyMap');
-    if (savedKeyMap) {
-      setKeyMap(JSON.parse(savedKeyMap));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('keyMap', JSON.stringify(keyMap));
-  }, [keyMap]);
   
   // Keybinding piano note section
   const handleChange = (event) => {
@@ -86,7 +77,7 @@ const MapSong = () => {
             key={`${key}${octave}`}
             type="text"
             name={`${key}${octave}`}
-            value={keyMap[`${key}${octave}`]}
+            value={keyMap[`${key}${octave}`] || ''}
             onChange={handleChange}
             className="border-2 border-gray-400 p-1 rounded-lg text-center w-12"
             maxLength="1"
@@ -96,14 +87,26 @@ const MapSong = () => {
       </div>
     );
   };
-
+  
   // Create AHK Script using a modal section
   const handleSubmit = (event) => {
     event.preventDefault();
     const mapData = { notes, keyMap };
     const AHKScript = NotesMapper(mapData);
-    const songData = { title, author, AHKScript };
-    openModal(songData);
+  
+    const songData = { title, author, notes, keyMap };
+  
+    axios
+      .put(`http://localhost:5988/songs/${id}`, songData)
+      .then(() => {
+        enqueueSnackbar("Song saved successfully with key mappings!", { variant: "success" });
+      })
+      .catch((error) => {
+        enqueueSnackbar("Error saving song with key mappings!", { variant: "error" });
+        console.error(error);
+      });
+  
+    openModal({ ...songData, AHKScript });
   };
 
   // Page layout section
