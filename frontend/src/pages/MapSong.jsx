@@ -27,6 +27,7 @@ const MapSong = () => {
   });
   const [activeSong, setActiveSong] = useState(null);
 
+  // Modal section
   const openModal = (song) => {
     setActiveSong(song);
   };
@@ -35,6 +36,7 @@ const MapSong = () => {
     setActiveSong(null);
   };
 
+  // Load song data section
   useEffect(() => {
     setLoading(true);
     axios
@@ -53,6 +55,19 @@ const MapSong = () => {
       });
   }, [id, enqueueSnackbar]);
 
+  // Store previous keybind section
+  useEffect(() => {
+    const savedKeyMap = localStorage.getItem('keyMap');
+    if (savedKeyMap) {
+      setKeyMap(JSON.parse(savedKeyMap));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('keyMap', JSON.stringify(keyMap));
+  }, [keyMap]);
+  
+  // Keybinding piano note section
   const handleChange = (event) => {
     const { name, value } = event.target;
     setKeyMap((prevMapping) => ({
@@ -82,6 +97,7 @@ const MapSong = () => {
     );
   };
 
+  // Create AHK Script using a modal section
   const handleSubmit = (event) => {
     event.preventDefault();
     const mapData = { notes, keyMap };
@@ -90,6 +106,7 @@ const MapSong = () => {
     openModal(songData);
   };
 
+  // Page layout section
   return (
     <div className='p-4'>
       <BackButton />
