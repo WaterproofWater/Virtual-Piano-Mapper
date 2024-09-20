@@ -15,8 +15,12 @@ const MapSong = () => {
   const [author, setAuthor] = useState('');
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
+  const [activeSong, setActiveSong] = useState(null);
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
+
+  const [startKey, setStartKey] = useState(']');
+  const [stopKey, setStopKey] = useState('[');
   const [keyMap, setKeyMap] = useState({
     c1: '', d1: '', e1: '', f1: '', g1: '', a1: '', b1: '', C1: '', D1: '', F1: '', G1: '', A1: '',
     c2: '', d2: '', e2: '', f2: '', g2: '', a2: '', b2: '', C2: '', D2: '', F2: '', G2: '', A2: '',
@@ -25,7 +29,6 @@ const MapSong = () => {
     c5: '', d5: '', e5: '', f5: '', g5: '', a5: '', b5: '', C5: '', D5: '', F5: '', G5: '', A5: '',
     c6: '', d6: '', e6: '', f6: '', g6: '', a6: '', b6: '', C6: '', D6: '', F6: '', G6: '', A6: ''
   });
-  const [activeSong, setActiveSong] = useState(null);
 
   // Modal section
   const openModal = (song) => {
@@ -91,10 +94,13 @@ const MapSong = () => {
   // Create AHK Script using a modal section
   const handleSubmit = (event) => {
     event.preventDefault();
-    const mapData = { notes, keyMap };
+    const mapData = { notes, keyMap, startKey, stopKey };
     const AHKScript = NotesMapper(mapData);
   
-    const songData = { title, author, notes, keyMap };
+    const songData = { title, author, notes, keyMap};
+
+    console.log(startKey);
+    console.log(stopKey);
   
     axios
       .put(`http://localhost:5988/songs/${id}`, songData)
@@ -145,8 +151,36 @@ const MapSong = () => {
 
         <hr className="my-4 border-gray-500" />
 
-        <form onSubmit={handleSubmit} className="flex flex-col items-center">
-          <h2 className="text-lg font-semibold mb-2"> Map Piano Keys to PC Keys (be sure that they are all unique!) </h2>
+        <div className="flex justify-center items-center gap-10">
+          <div className="flex flex-col items-center">
+            <label htmlFor="startKey" className="text-lg font-bold mb-2"> Start Key </label>
+            <input
+              id="startKey"
+              type="text"
+              value={startKey}
+              onChange={(e) => setStartKey(e.target.value)}
+              className="border-2 border-gray-400 p-1 rounded-lg text-center w-12"
+              maxLength="1"
+              placeholder="]"
+            />
+          </div>
+
+          <div className="flex flex-col items-center">
+            <label htmlFor="stopKey" className="text-lg font-bold mb-2"> Stop Key </label>
+            <input
+              id="stopKey"
+              type="text"
+              value={stopKey}
+              onChange={(e) => setStopKey(e.target.value)}
+              className="border-2 border-gray-400 p-1 rounded-lg text-center w-12"
+              maxLength="1"
+              placeholder="["
+            />
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="flex flex-col items-center my-4">
+          <h2 className="text-lg font-semibold mb-2"> Keybind Piano Keys to PC Keys (be sure that they are all unique!) </h2>
 
           <div className="space-y-5">
             {renderOctaveInputs(1)}

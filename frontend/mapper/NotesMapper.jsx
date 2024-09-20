@@ -1,11 +1,14 @@
 const NotesMapper = (data) => {
-    const { notes, keyMap } = data;
+    const { notes, keyMap, startKey, stopKey} = data;
 
-    let script = `*[:: 
+    console.log(startKey);
+    console.log(stopKey);
+
+    let script = `*${startKey}:: 
     Reload 
     return
 
-*]::\n`;
+*${stopKey}::\n`;
      
     let waitTime = 0;  
     const lines = notes.split('\n');
@@ -159,9 +162,9 @@ const NotesMapper = (data) => {
 
                 script += `    send, {${mappedKey}}\n`;
             } 
-            else {
-                console.log(`Note ${noteKey} not found in keyMap`);
-            }
+            // else {
+            //     console.log(`Note ${noteKey} not found in keyMap`);
+            // }
 
             // Skip the octave character since it was just processed
             i += 1; 
