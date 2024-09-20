@@ -10,6 +10,17 @@ const NotesMapper = (data) => {
     let waitTime = 0;  
     const lines = notes.split('\n');
 
+    // Strip LH and RH tags 
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i]) {
+            const firstThreeChars = lines[i].slice(0, 3);
+    
+            if (firstThreeChars === "RH:" || firstThreeChars === "LH:") {
+                lines[i] = lines[i].slice(3);
+            }
+        }
+    }
+
     console.log("Org Lines:",lines);
 
     // Merge logic
@@ -125,12 +136,12 @@ const NotesMapper = (data) => {
         const char = mergedFinalLine[i];
 
         if (char === '-') {
-            waitTime += 140;
+            waitTime += 100;
             continue;
         }
 
         else if (char === '*') {
-            script += `    sleep, 50\n`;
+            script += `    sleep, 30\n`;
         }
 
         else {
