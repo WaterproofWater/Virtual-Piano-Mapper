@@ -91,6 +91,16 @@ const MapSong = () => {
       </div>
     );
   };
+
+  // Clear keybinds section
+  const handleClearKeybinds = () => {
+    const clearedKeyMap = Object.keys(keyMap).reduce((acc, key) => {
+      acc[key] = '';
+      return acc;
+    }, {});
+
+    setKeyMap(clearedKeyMap);
+  };
   
   // Create AHK Script using a modal section
   const handleSubmit = (event) => {
@@ -100,7 +110,7 @@ const MapSong = () => {
   
     const songData = { title, author, notes, keyMap};
   
-    axios.put(`http://localhost:5988/songs/${id}`, songData)
+    axios.put(`http://localhost:5988/songs/${id}`, songData);
     openModal({ ...songData, AHKScript });
   };
 
@@ -131,14 +141,14 @@ const MapSong = () => {
           <p className='text-gray-700 break-words'> {notes} </p>
         </div>
 
-        <hr className="my-4 border-gray-500" />
+        <hr className="my-4 border-gray-500 w-full" />
 
         <div className="flex justify-center">
           <img src={pianoKeys} alt="Piano" className="rounded-lg shadow-lg" />
         </div>
         <h1 className='flex flex-col items-center'> - Octave 1 and 6 are missing from the image - </h1>
 
-        <hr className="my-4 border-gray-500" />
+        <hr className="my-4 border-gray-500 w-full" />
 
         <div className="flex justify-center items-center gap-10">
           <div className="flex flex-col items-center">
@@ -180,7 +190,19 @@ const MapSong = () => {
             {renderOctaveInputs(6)}
           </div>
 
-          <div className="w-[50%] px-4 my-5">
+          <div className="flex justify-center w-full mt-4 mb-2">
+            <button
+              type="button"
+              onClick={handleClearKeybinds}
+              className="p-1 bg-red-600 text-white transition hover:bg-red-700 rounded item-center"
+            >
+              Clear Keybinds
+            </button>
+          </div>
+
+          <hr className="my-4 border-gray-500 w-full" />
+
+          <div className="w-[50%] px-4 mt-1 mb-5">
             <label htmlFor="delay" className="text-lg font-semibold mb-2 block text-center">
               Delay (per -): {delay} ms
             </label>
