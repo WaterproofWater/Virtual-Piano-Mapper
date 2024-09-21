@@ -21,6 +21,7 @@ const MapSong = () => {
 
   const [startKey, setStartKey] = useState(']');
   const [stopKey, setStopKey] = useState('[');
+  const [delay, setDelay] = useState(150);
   const [keyMap, setKeyMap] = useState({
     c1: '', d1: '', e1: '', f1: '', g1: '', a1: '', b1: '', C1: '', D1: '', F1: '', G1: '', A1: '',
     c2: '', d2: '', e2: '', f2: '', g2: '', a2: '', b2: '', C2: '', D2: '', F2: '', G2: '', A2: '',
@@ -94,24 +95,12 @@ const MapSong = () => {
   // Create AHK Script using a modal section
   const handleSubmit = (event) => {
     event.preventDefault();
-    const mapData = { notes, keyMap, startKey, stopKey };
+    const mapData = { notes, keyMap, startKey, stopKey, delay };
     const AHKScript = NotesMapper(mapData);
   
     const songData = { title, author, notes, keyMap};
-
-    console.log(startKey);
-    console.log(stopKey);
   
-    axios
-      .put(`http://localhost:5988/songs/${id}`, songData)
-      .then(() => {
-        enqueueSnackbar("Song saved successfully with key mappings!", { variant: "success" });
-      })
-      .catch((error) => {
-        enqueueSnackbar("Error saving song with key mappings!", { variant: "error" });
-        console.error(error);
-      });
-  
+    axios.put(`http://localhost:5988/songs/${id}`, songData)
     openModal({ ...songData, AHKScript });
   };
 
@@ -191,7 +180,23 @@ const MapSong = () => {
             {renderOctaveInputs(6)}
           </div>
 
-          <button type="submit" className="p-2 bg-blue-600 m-8 text-white transition hover:bg-blue-700 rounded">
+          <div className="w-[50%] px-4 my-5">
+            <label htmlFor="delay" className="text-lg font-semibold mb-2 block text-center">
+              Delay (per -): {delay} ms
+            </label>
+            <input
+              type="range"
+              id="delay"
+              min="100"
+              max="200"
+              step="10"
+              value={delay}
+              onChange={(e) => setDelay(Number(e.target.value))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            />
+          </div>
+
+          <button type="submit" className="p-2 bg-blue-600 text-white transition hover:bg-blue-700 rounded">
             Map to AutoHotKey Script
           </button>
         </form>

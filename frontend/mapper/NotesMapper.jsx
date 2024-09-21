@@ -1,14 +1,12 @@
 const NotesMapper = (data) => {
-    const { notes, keyMap, startKey, stopKey} = data;
+    const { notes, keyMap, startKey, stopKey, delay} = data;
+    const concurrentDelay = Math.round(delay * 0.75);
 
-    console.log(startKey);
-    console.log(stopKey);
-
-    let script = `*${startKey}:: 
+    let script = `*${stopKey}:: 
     Reload 
     return
 
-*${stopKey}::\n`;
+*${startKey}::\n`;
      
     let waitTime = 0;  
     const lines = notes.split('\n');
@@ -139,12 +137,12 @@ const NotesMapper = (data) => {
         const char = mergedFinalLine[i];
 
         if (char === '-') {
-            waitTime += 100;
+            waitTime += delay;
             continue;
         }
 
         else if (char === '*') {
-            script += `    sleep, 30\n`;
+            script += `    sleep, ${concurrentDelay}\n`;
         }
 
         else {
