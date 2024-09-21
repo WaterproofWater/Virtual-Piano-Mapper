@@ -38,9 +38,9 @@ const MapModal = ({ song, onClose }) => {
 
         <h2 className='text-lg font-semibold mb-2 pt-3'> AutoHotKey Script: </h2>
 
-        <div className='relative'>
+        <div className='relative mt-2 rounded-xl'>
           <button
-            className='absolute right-0 bg-blue-600 text-white px-4 py-2 text-sm rounded-xl hover:bg-blue-700 m-2'
+            className='absolute right-0 bg-blue-600 text-white px-2 py-1 text-sm rounded-xl hover:bg-blue-700 m-1'
             onClick={copyToClipboard}
           >
             Copy
