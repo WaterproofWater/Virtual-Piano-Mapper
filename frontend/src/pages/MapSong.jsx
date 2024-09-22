@@ -7,8 +7,8 @@ import { useSnackbar } from 'notistack';
 import { MdMusicNote } from 'react-icons/md';
 import { BiUserCircle } from 'react-icons/bi';
 import pianoKeys from '../components/images/piano-keys.png';
-import MapModal from '../components/mapper/MapModal';
-import NotesMapper from '../components/mapper/NotesMapper';
+import ScriptModal from '../components/mapper/ScriptModal';
+import ScriptGenerator from '../components/mapper/ScriptGenerator';
 
 const MapSong = () => {
   const [title, setTitle] = useState('');
@@ -106,7 +106,7 @@ const MapSong = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const mapData = { notes, keyMap, startKey, stopKey, delay };
-    const AHKScript = NotesMapper(mapData);
+    const AHKScript = ScriptGenerator(mapData);
   
     const songData = { title, author, notes, keyMap};
   
@@ -223,7 +223,7 @@ const MapSong = () => {
           </button>
         </form>
       </div>
-      {activeSong && <MapModal song={activeSong} onClose={closeModal} />}
+      {activeSong && <ScriptModal song={activeSong} onClose={closeModal} />}
     </div>
   );
 };

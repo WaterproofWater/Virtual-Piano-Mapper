@@ -1,4 +1,4 @@
-const NotesMapper = (data) => {
+const ScriptGenerator = (data) => {
     const { notes, keyMap, startKey, stopKey, delay} = data;
     const consecutiveDelay = Math.round(delay * 0.95);
 
@@ -122,38 +122,8 @@ const NotesMapper = (data) => {
         
                 mergedNotes += combinedNote;
             }
-        
+            
             mergedLines[index] = mergedNotes;
-        
-            console.log("merged line:", mergedLines[index]);
-        
-            // const maxLength = Math.max(...notesArray.map(notes => notes.length));
-        
-            // for (let i = 0; i < maxLength; i++) {
-            //     let combinedNote = '';
-        
-            //     for (let j = 0; j < notesArray.length; j++) {
-            //         const note = notesArray[j][i] || '-';
-            //         const octave = octavesArray[j];
-        
-            //         if (note !== '-') {
-            //             if (octave === previousOctave) {
-            //                 combinedNote += `*${note}${octave}`;
-            //             } 
-            //             else {
-            //                 combinedNote += `${note}${octave}`;
-            //             }
-            //             previousOctave = octave; 
-            //         }
-            //     }
-        
-            //     if (combinedNote == '') {
-            //         previousOctave = '';
-            //     }
-            //     mergedNotes += combinedNote || '-';
-            // }
-        
-            // mergedLines[index] = mergedNotes;
         }
         
         
@@ -197,9 +167,9 @@ const NotesMapper = (data) => {
 
                 script += `    send, {${mappedKey}}\n`;
             } 
-            // else {
-            //     console.log(`Note ${noteKey} not found in keyMap`);
-            // }
+            else {
+                console.log(`Note ${noteKey} not found in keyMap`);
+            }
 
             // Skip the octave character since it was just processed
             i += 1; 
@@ -213,4 +183,4 @@ const NotesMapper = (data) => {
     return script;
 };
 
-export default NotesMapper;
+export default ScriptGenerator;

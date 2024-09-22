@@ -4,7 +4,7 @@ import { MdMusicNote } from 'react-icons/md';
 import { BiUserCircle } from 'react-icons/bi';
 import { useSnackbar } from 'notistack';
 
-const MapModal = ({ song, onClose }) => {
+const ScriptModal = ({ song, onClose }) => {
   const { enqueueSnackbar } = useSnackbar();
   
   const copyToClipboard = () => {
@@ -59,4 +59,4 @@ const MapModal = ({ song, onClose }) => {
   );
 };
 
-export default MapModal;
+export default ScriptModal;
