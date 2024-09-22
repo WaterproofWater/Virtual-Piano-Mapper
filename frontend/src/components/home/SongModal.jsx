@@ -35,7 +35,7 @@ const SongModal = ({ song, onClose }) => {
           className='p-4 bg-gray-200 rounded-xl w-full max-h-[500px] overflow-y-auto custom-scrollbar' 
           style={{ whiteSpace: 'pre-wrap' }}
         >
-          <p className='text-gray-700 break-words'> {song.notes} </p>
+          <p className='text-gray-700 break-words'>{song.notes}</p>
         </div>
 
         <div className='flex justify-center mt-4'>

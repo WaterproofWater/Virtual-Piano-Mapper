@@ -138,7 +138,7 @@ const MapSong = () => {
           className='p-4 bg-gray-200 rounded-md w-full max-h-[500px] overflow-y-auto custom-scrollbar' 
           style={{ whiteSpace: 'pre-wrap' }}
         >
-          <p className='text-gray-700 break-words'> {notes} </p>
+          <p className='text-gray-700 break-words'>{notes}</p>
         </div>
 
         <hr className="my-4 border-gray-500 w-full" />
