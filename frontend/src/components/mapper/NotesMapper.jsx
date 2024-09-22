@@ -1,6 +1,6 @@
 const NotesMapper = (data) => {
     const { notes, keyMap, startKey, stopKey, delay} = data;
-    const concurrentDelay = Math.round(delay * 0.75);
+    const consecutiveDelay = Math.round(delay * 0.95);
 
     let script = `*${stopKey}:: 
     Reload 
@@ -24,7 +24,7 @@ const NotesMapper = (data) => {
 
     console.log("Org Lines:",lines);
 
-    // Merge logic
+    // Merge concurrent lines into group logic
     let mergedLines = [];
     let mergeGroup = [];
     
@@ -57,7 +57,9 @@ const NotesMapper = (data) => {
         }
     }
 
-    // Small delay for repeating octave
+    console.log("raw merged lines: ", ...mergedLines)
+
+    // Merge concurent group into line, and implements small delay for repeating notes of the same octave
     let previousOctave = '';
     mergedLines.forEach((line, index) => {
         if (typeof line === 'string') {
@@ -83,40 +85,75 @@ const NotesMapper = (data) => {
             }
 
             mergedLines[index] = mergedNotes;
-
         } 
+
         else if (Array.isArray(line)) {
             let mergedNotes = '';
-            const notesArray = line.map(l => l.split('|')[1]);   // Get notes part from each line
-            const octavesArray = line.map(l => l.split('|')[0]); // Get octaves from each line
+            const notesArray = line.map(l => l.split('|')[1]);   // Extract notes part from each line
+            const octavesArray = line.map(l => l.split('|')[0]); // Extract octaves from each line
+            const rowLen = octavesArray.length;
+            const columnLen = notesArray[0].length;
+            let prevOctaveArray = Array(rowLen).fill('');
         
-            const maxLength = Math.max(...notesArray.map(notes => notes.length));
+            console.log("notes array: ", ...notesArray);
+            console.log("octaves array: ", ...octavesArray);
         
-            for (let i = 0; i < maxLength; i++) {
+            for (let i = 0; i < columnLen; i++) {
                 let combinedNote = '';
         
-                for (let j = 0; j < notesArray.length; j++) {
-                    const note = notesArray[j][i] || '-';
+                for (let j = 0; j < rowLen; j++) {
+                    const note = notesArray[j][i];
                     const octave = octavesArray[j];
         
                     if (note !== '-') {
-                        if (octave === previousOctave) {
+                        if (octave === prevOctaveArray[j]) {
                             combinedNote += `*${note}${octave}`;
-                        } 
-                        else {
+                        } else {
                             combinedNote += `${note}${octave}`;
+                            prevOctaveArray[j] = octave;
                         }
-                        previousOctave = octave; 
                     }
                 }
         
-                if (combinedNote == '') {
-                    previousOctave = '';
+                if (combinedNote === '') {
+                    combinedNote += '-';
+                    prevOctaveArray = Array(rowLen).fill('');
                 }
-                mergedNotes += combinedNote || '-';
+        
+                mergedNotes += combinedNote;
             }
         
             mergedLines[index] = mergedNotes;
+        
+            console.log("merged line:", mergedLines[index]);
+        
+            // const maxLength = Math.max(...notesArray.map(notes => notes.length));
+        
+            // for (let i = 0; i < maxLength; i++) {
+            //     let combinedNote = '';
+        
+            //     for (let j = 0; j < notesArray.length; j++) {
+            //         const note = notesArray[j][i] || '-';
+            //         const octave = octavesArray[j];
+        
+            //         if (note !== '-') {
+            //             if (octave === previousOctave) {
+            //                 combinedNote += `*${note}${octave}`;
+            //             } 
+            //             else {
+            //                 combinedNote += `${note}${octave}`;
+            //             }
+            //             previousOctave = octave; 
+            //         }
+            //     }
+        
+            //     if (combinedNote == '') {
+            //         previousOctave = '';
+            //     }
+            //     mergedNotes += combinedNote || '-';
+            // }
+        
+            // mergedLines[index] = mergedNotes;
         }
         
         
@@ -142,7 +179,7 @@ const NotesMapper = (data) => {
         }
 
         else if (char === '*') {
-            script += `    sleep, ${concurrentDelay}\n`;
+            script += `    sleep, ${consecutiveDelay}\n`;
         }
 
         else {
