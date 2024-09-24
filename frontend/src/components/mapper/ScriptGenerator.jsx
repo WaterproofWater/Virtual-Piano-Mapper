@@ -59,7 +59,7 @@ const ScriptGenerator = (data) => {
 
     console.log("raw merged lines: ", ...mergedLines)
 
-    // Merge concurent group into line, and implements small delay for repeating notes of the same octave
+    // Merge concurent group into line, and implements consecutive delay for consecutive notes
     let previousOctave = '';
     mergedLines.forEach((line, index) => {
         if (typeof line === 'string') {
@@ -93,7 +93,7 @@ const ScriptGenerator = (data) => {
             const octavesArray = line.map(l => l.split('|')[0]); // Extract octaves from each line
             const rowLen = octavesArray.length;
             const columnLen = notesArray[0].length;
-            let prevOctaveArray = Array(rowLen).fill('');
+            let lastElement = '-';
         
             console.log("notes array: ", ...notesArray);
             console.log("octaves array: ", ...octavesArray);
@@ -106,23 +106,35 @@ const ScriptGenerator = (data) => {
                     const octave = octavesArray[j];
         
                     if (note !== '-') {
-                        if (octave === prevOctaveArray[j]) {
+                        console.log("note: ", note);
+                        console.log("last element: ", lastElement);
+                        if (lastElement !== '-') {
                             combinedNote += `*${note}${octave}`;
-                        } else {
+                            lastElement = '-';
+
+                        } 
+                        else {
                             combinedNote += `${note}${octave}`;
-                            prevOctaveArray[j] = octave;
+                            console.log("current combinedNote2: ", combinedNote);
                         }
                     }
                 }
         
                 if (combinedNote === '') {
                     combinedNote += '-';
-                    prevOctaveArray = Array(rowLen).fill('');
+                    lastElement = '-';
+
+                    console.log("reset (met -): ", lastElement);
                 }
+
+                else {
+                    lastElement = `a`;
+                }
+
         
                 mergedNotes += combinedNote;
             }
-            
+
             mergedLines[index] = mergedNotes;
         }
         
@@ -167,9 +179,9 @@ const ScriptGenerator = (data) => {
 
                 script += `    send, {${mappedKey}}\n`;
             } 
-            else {
-                console.log(`Note ${noteKey} not found in keyMap`);
-            }
+            // else {
+            //     console.log(`Note ${noteKey} not found in keyMap`);
+            // }
 
             // Skip the octave character since it was just processed
             i += 1; 
