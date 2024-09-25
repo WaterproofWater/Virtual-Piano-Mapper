@@ -1,6 +1,22 @@
 const ScriptGenerator = (data) => {
     const { notes, keyMap, startKey, stopKey, delay} = data;
     const consecutiveDelay = Math.round(delay * 0.95);
+    const specialCharacters = [
+        '`',
+        "'",
+        '"',
+        ',',
+        ';',
+        ':',
+        '+',
+        '-',
+        '.',
+        '/',
+        '\\',
+        ' ',
+        '^',
+        '%' 
+    ];
 
     let script = `*${stopKey}:: 
     Reload 
@@ -95,9 +111,6 @@ const ScriptGenerator = (data) => {
             const columnLen = notesArray[0].length;
             let lastElement = '-';
         
-            console.log("notes array: ", ...notesArray);
-            console.log("octaves array: ", ...octavesArray);
-        
             for (let i = 0; i < columnLen; i++) {
                 let combinedNote = '';
         
@@ -106,8 +119,6 @@ const ScriptGenerator = (data) => {
                     const octave = octavesArray[j];
         
                     if (note !== '-') {
-                        console.log("note: ", note);
-                        console.log("last element: ", lastElement);
                         if (lastElement !== '-') {
                             combinedNote += `*${note}${octave}`;
                             lastElement = '-';
@@ -115,7 +126,6 @@ const ScriptGenerator = (data) => {
                         } 
                         else {
                             combinedNote += `${note}${octave}`;
-                            console.log("current combinedNote2: ", combinedNote);
                         }
                     }
                 }
@@ -123,8 +133,6 @@ const ScriptGenerator = (data) => {
                 if (combinedNote === '') {
                     combinedNote += '-';
                     lastElement = '-';
-
-                    console.log("reset (met -): ", lastElement);
                 }
 
                 else {
@@ -177,8 +185,14 @@ const ScriptGenerator = (data) => {
                     waitTime = 0;
                 }
 
-                script += `    send, {${mappedKey}}\n`;
-            } 
+                if (specialCharacters.includes(mappedKey)) {
+                    console.log(mappedKey);
+                    script += `    send, {\`${mappedKey}}\n`;
+                } 
+                else {
+                    script += `    send, {${mappedKey}}\n`;
+                }
+            }
             // else {
             //     console.log(`Note ${noteKey} not found in keyMap`);
             // }

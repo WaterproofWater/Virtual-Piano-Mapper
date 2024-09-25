@@ -190,7 +190,7 @@ const MapSong = () => {
             {renderOctaveInputs(6)}
           </div>
 
-          <div className="flex justify-center w-full mt-4 mb-2">
+          <div className="flex justify-center w-full mt-10 mb-2">
             <button
               type="button"
               onClick={handleClearKeybinds}
