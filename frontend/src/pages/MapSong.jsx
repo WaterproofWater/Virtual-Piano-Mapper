@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import BackButton from '../components/BackButton';
@@ -19,6 +19,7 @@ const MapSong = () => {
   const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar();
 
+  const inputRefs = useRef([]);
   const [startKey, setStartKey] = useState(']');
   const [stopKey, setStopKey] = useState('[');
   const [delay, setDelay] = useState(150);
@@ -31,7 +32,7 @@ const MapSong = () => {
     c6: '', d6: '', e6: '', f6: '', g6: '', a6: '', b6: '', C6: '', D6: '', F6: '', G6: '', A6: ''
   });
 
-  // Modal section
+  // ScriptModal section
   const openModal = (song) => {
     setActiveSong(song);
   };
@@ -63,26 +64,60 @@ const MapSong = () => {
   }, [id, enqueueSnackbar]);
   
   // Keybinding piano note section
-  const handleChange = (event) => {
+  const handleChange = (event, index) => {
     const { name, value } = event.target;
-    setKeyMap((prevMapping) => ({
-      ...prevMapping,
-      [name]: value
-    }));
+  
+    setKeyMap((prevMapping) => {
+      const newMapping = { ...prevMapping, [name]: value };
+      inputRefs.current[index].value = value;
+      return newMapping;
+    });
+  
+    // Move focus to the next input field within the octave
+    if (inputRefs.current[index + 1]) {
+      inputRefs.current[index + 1].focus();
+    }
   };
-
+  
+  const handlePaste = (event, index) => {
+    event.preventDefault(); // Prevent paste pasting all elements into 1 input box
+    const pastedString = event.clipboardData.getData('text').trim(); 
+    const pastedChars = pastedString.split('');
+  
+    setKeyMap((prevMapping) => {
+      const newMapping = { ...prevMapping };
+      
+      pastedChars.forEach((char, charIdx) => {
+        const inputIndex = index + charIdx;
+        const keyName = inputRefs.current[inputIndex]?.name;
+        if (keyName) {
+          newMapping[keyName] = char;
+        }
+      });
+      
+      return newMapping;
+    });
+  
+    // Move focus to the next input field after the last pasted character
+    if (inputRefs.current[index + pastedChars.length]) {
+      inputRefs.current[index + pastedChars.length].focus();
+    }
+  };
+  
   const renderOctaveInputs = (octave) => {
     const keys = ['c', 'C', 'd', 'D', 'e', 'f', 'F', 'g', 'G', 'a', 'A', 'b'];
     return (
       <div className="flex items-center gap-2">
         <span className="text-lg font-bold mr-4"> Octave {octave}: </span>
-        {keys.map((key) => (
+        {keys.map((key, index) => (
           <input
             key={`${key}${octave}`}
+            ref={(el) => (inputRefs.current[(octave - 1) * 12 + index] = el)}
             type="text"
             name={`${key}${octave}`}
             value={keyMap[`${key}${octave}`] || ''}
-            onChange={handleChange}
+            onChange={(e) => handleChange(e, (octave - 1) * 12 + index)}
+            onPaste={(e) => handlePaste(e, (octave - 1) * 12 + index)}
             className="border-2 border-gray-400 p-1 rounded-lg text-center w-12"
             maxLength="1"
             placeholder={key}
@@ -91,6 +126,7 @@ const MapSong = () => {
       </div>
     );
   };
+  
 
   // Clear keybinds section
   const handleClearKeybinds = () => {
