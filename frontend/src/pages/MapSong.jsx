@@ -65,16 +65,16 @@ const MapSong = () => {
   
   // Keybinding piano note section
   const handleChange = (event, index) => {
-    console.log("IN INPUT DETECTION");
     const { name, value } = event.target;
+
+    setKeyMap((prevMapping) => ({
+      ...prevMapping,
+      [name]: value,
+    }));
+
+    inputRefs.current[index].value = value;
   
-    setKeyMap((prevMapping) => {
-      const newMapping = { ...prevMapping, [name]: value };
-      inputRefs.current[index].value = value;
-      return newMapping;
-    });
-  
-    // Move focus to the next input field within the octave
+    // Move focus to the next input field, if it exists
     if (inputRefs.current[index + 1]) {
       inputRefs.current[index + 1].focus();
     }
@@ -106,6 +106,18 @@ const MapSong = () => {
   };
 
   const handleKeyDown = (event, index) => {
+
+    // Backspace Handler
+    if (event.key === 'Backspace') {
+      inputRefs.current[index].value = '';
+      setKeyMap((prevMapping) => ({
+        ...prevMapping,
+        [event.target.name]: '' 
+      }));
+      return;
+    }
+    
+    // Arrow Keys handler
     if (event.key === 'ArrowRight' && inputRefs.current[index + 1]) {
       inputRefs.current[index + 1].focus();
     }
@@ -122,7 +134,6 @@ const MapSong = () => {
       inputRefs.current[index + 12].focus();
     }
   };
-  
   
   const renderOctaveInputs = (octave) => {
     const keys = ['c', 'C', 'd', 'D', 'e', 'f', 'F', 'g', 'G', 'a', 'A', 'b'];
