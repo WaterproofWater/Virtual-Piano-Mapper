@@ -65,6 +65,7 @@ const MapSong = () => {
   
   // Keybinding piano note section
   const handleChange = (event, index) => {
+    console.log("IN INPUT DETECTION");
     const { name, value } = event.target;
   
     setKeyMap((prevMapping) => {
@@ -103,6 +104,25 @@ const MapSong = () => {
       inputRefs.current[index + pastedChars.length].focus();
     }
   };
+
+  const handleKeyDown = (event, index) => {
+    if (event.key === 'ArrowRight' && inputRefs.current[index + 1]) {
+      inputRefs.current[index + 1].focus();
+    }
+  
+    if (event.key === 'ArrowLeft' && inputRefs.current[index - 1]) {
+      inputRefs.current[index - 1].focus();
+    }
+
+    if (event.key === 'ArrowUp' && inputRefs.current[index - 12]) {
+      inputRefs.current[index - 12].focus();
+    }
+  
+    if (event.key === 'ArrowDown' && inputRefs.current[index + 12]) {
+      inputRefs.current[index + 12].focus();
+    }
+  };
+  
   
   const renderOctaveInputs = (octave) => {
     const keys = ['c', 'C', 'd', 'D', 'e', 'f', 'F', 'g', 'G', 'a', 'A', 'b'];
@@ -118,6 +138,7 @@ const MapSong = () => {
             value={keyMap[`${key}${octave}`] || ''}
             onChange={(e) => handleChange(e, (octave - 1) * 12 + index)}
             onPaste={(e) => handlePaste(e, (octave - 1) * 12 + index)}
+            onKeyDown={(e) => handleKeyDown(e, (octave - 1) * 12 + index)}
             className="border-2 border-gray-400 p-1 rounded-lg text-center w-12"
             maxLength="1"
             placeholder={key}
