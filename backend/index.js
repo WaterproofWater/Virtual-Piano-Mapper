@@ -4,7 +4,7 @@ import songsRoute from "./routes/songRoute.js";
 import cors from "cors";
 
 const PORT = 5988;
-const MONGO_DB_URL = "mongodb+srv://root:rootpass@song-notes-db.lp1nq.mongodb.net/?retryWrites=true&w=majority&appName=Song-Notes-DB"
+const MONGO_DB_URL = "mongodb+srv://root:rootpass@song-notes-db.lp1nq.mongodb.net/?retryWrites=true&w=majority&appName=Song-Notes-DB" // Change this to your MongoDB URL
 const app = express();
 
 // Start: npm run dev

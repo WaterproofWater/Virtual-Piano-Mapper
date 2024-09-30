@@ -25,7 +25,7 @@ const Home = () => {
   return (
     <div className='p-4'>
       <div className='flex justify-between items-center'>
-        <h1 className='text-3xl my-8'> Song List </h1>
+        <h1 className='text-3xl my-8'> Song List: </h1>
         <Link to='/songs/create'>
            <button className='flex items-center gap-2 bg-sky-900 text-white px-4 py-2 rounded-full hover:bg-sky-700 transition'>
             <MdAdd className='text-white text-2xl' />
@@ -33,6 +33,8 @@ const Home = () => {
           </button>
         </Link>
       </div>
+
+      <hr className="my-4 border-black w-full border-1" />
 
       {loading ? (
         <Spinner />
