@@ -8,7 +8,7 @@ import { MdMusicNote } from 'react-icons/md';
 import { BiUserCircle } from 'react-icons/bi';
 import pianoKeys from '../components/images/piano-keys.png';
 import ScriptModal from '../components/mapper/ScriptModal';
-import ScriptGenerator from '../components/mapper/ScriptGenerator';
+import ScriptGenerator from '../../../backend/services/ScriptGenerator';
 
 const MapSong = () => {
   const [title, setTitle] = useState('');

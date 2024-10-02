@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 import { useSnackbar } from 'notistack';
-import URLModal from '../components/URLModal';
+import URLModal from '../components/scraper/URLModal';
 
 const CreateSong = () => {
   const [title, setTitle] = useState('');
