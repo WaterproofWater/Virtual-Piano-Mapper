@@ -11,6 +11,7 @@ const CreateSong = () => {
   const [author, setAuthor] = useState('');
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const notesRef = useRef(null); 
   const { enqueueSnackbar } = useSnackbar();
@@ -25,7 +26,7 @@ const CreateSong = () => {
     setLoading(true);
     axios.post(`http://localhost:5988/songs`, data).then(() => {
       setLoading(false);
-      enqueueSnackbar("Song created successfuly!", { variant: "success"});
+      enqueueSnackbar("Song created successfully!", { variant: "success"});
       navigate('/');
     }).catch((error) => {
       setLoading(false);
@@ -42,14 +43,14 @@ const CreateSong = () => {
     if (textarea.scrollHeight > 1000) {
       textarea.style.height = '1000px';
       textarea.style.overflowY = 'auto'; 
-    } 
-    else {
+    } else {
       textarea.style.overflowY = 'hidden';
     }
   };
 
   const handleAddUsingURL = (event) => {
-    
+    event.preventDefault();
+    setIsModalOpen(true);
   };
 
   return (
@@ -57,14 +58,13 @@ const CreateSong = () => {
       <BackButton />
       <h1 className='text-3xl my-4'> Song Creation: </h1>
 
-      {loading ? (<Spinner />) : ('')}
+      {loading && <Spinner />}
 
       <div className='flex items-center justify-center mb-5'>
         <button className='flex items-center gap-2 bg-sky-900 text-white px-4 py-2 rounded-full hover:bg-sky-700 transition' onClick={handleAddUsingURL}>
           <span> Add Using URL </span>
         </button>
       </div>
-
 
       <div className='flex flex-col border-2 border-sky-400 rounded-xl w-[600px] p-4 mx-auto'>
         <div className='my-4'>
@@ -107,6 +107,10 @@ const CreateSong = () => {
 
         <button className='p-2 bg-blue-600 m-8 text-white' onClick={handleSaveSong}> Save </button>
       </div>
+
+      {isModalOpen && (
+        <URLModal onClose={() => setIsModalOpen(false)} />
+      )}
     </div>
   );
 };

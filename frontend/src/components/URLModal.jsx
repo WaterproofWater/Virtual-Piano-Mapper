@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { MdMusicNote } from 'react-icons/md';
 import { BiUserCircle } from 'react-icons/bi';
@@ -6,9 +6,12 @@ import { useSnackbar } from 'notistack';
 
 const URLModal = ({ onClose }) => {
   const { enqueueSnackbar } = useSnackbar();
-  
+  const [songURL, setSongURL] = useState('');
+
   const songRetrieveFromURL = () => {
-    navigator.clipboard.writeText(song.AHKScript);
+    // change this later to send to backend
+    console.log('Song URL:', songURL);
+    navigator.clipboard.writeText("AHK Script would be here");
     enqueueSnackbar("Song info retrieved successfully!", { variant: "success" });
   };
 
@@ -26,11 +29,22 @@ const URLModal = ({ onClose }) => {
           onClick={onClose}
         />
 
-        <h2 className='text-lg font-semibold mb-2 pt-3'> Input Song's pianoletternotes.blogspot URL: </h2>
+        <h2 className='text-lg font-semibold mb-2 pt-3'>
+          Input Song's pianoletternotes.blogspot URL:
+        </h2>
+
+        
+        <input
+          type='text'
+          className='border border-gray-300 p-2 w-full mb-4 rounded-lg'
+          placeholder="Paste song's URL here"
+          value={songURL}
+          onChange={(e) => setSongURL(e.target.value)}
+        />
 
         <div className='flex items-center justify-center mb-5'>
           <button
-            className='absolute right-0 bg-blue-600 text-white px-2 py-1 text-sm rounded-xl hover:bg-blue-700 m-1'
+            className='bg-blue-600 text-white px-4 py-2 text-sm rounded-xl hover:bg-blue-700'
             onClick={songRetrieveFromURL}
           >
             Search
