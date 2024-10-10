@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useSnackbar } from 'notistack';
-import { scrapeSongFromURL } from '../../../../backend/services/NoteScraper.js';
+import axios from 'axios';
 
 const URLModal = ({ onClose }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -12,26 +12,22 @@ const URLModal = ({ onClose }) => {
       enqueueSnackbar("Please enter a valid URL!", { variant: "warning" });
       return;
     }
-
+  
     try {
-      const response = await scrapeSongFromURL(url);
+      const response = await axios.post('http://localhost:5988/songs/scrape', { url });
 
-      if (response) {
-
-        // check if the response is received correctly
-        console.log(response);
-
-        enqueueSnackbar("Song info retrieved successfully!", { variant: "success" });
+      if (response.status === 201) {
+        console.log(response.data);
+        enqueueSnackbar("Song's data scraped and loaded successfully!", { variant: "success" });
         onClose();
       } 
       else {
-        enqueueSnackbar("Failed to retrieve song info.", { variant: "error" });
+        enqueueSnackbar("Failed to scrape song info.", { variant: "error" });
       }
-    } 
-    catch (error) {
-      enqueueSnackbar("Error retrieving song info.", { variant: "error" });
+    } catch (error) {
+      enqueueSnackbar("Error scraping song info.", { variant: "error" });
       console.error('Error:', error);
-    } 
+    }
   };
 
   return (
@@ -48,7 +44,7 @@ const URLModal = ({ onClose }) => {
           onClick={onClose}
         />
 
-        <h2 className='text-lg font-semibold mb-2 pt-3'> Input Song's pianoletternotesblogspot URL: </h2>
+        <h2 className='text-lg font-semibold mb-2 pt-3'>Input Song's pianoletternotesblogspot URL:</h2>
 
         <input
           type='text'

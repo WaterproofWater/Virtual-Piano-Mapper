@@ -1,5 +1,6 @@
 import express from "express";
 import { Song } from "../models/songModel.js";
+import { NoteScraper } from "../services/NoteScraper.js";
 
 const router = express.Router();
 
@@ -118,5 +119,29 @@ router.delete("/:id", async (request, response) => {  // URL for song list: http
         response.status(500).send({message: error.message});
     }
 });
+
+// Route to scrape song's info
+router.post("/scrape", async (request, response) => {
+    const { url } = request.body;
+
+    if (!url) {
+        return response.status(400).send({ message: "Error: URL is missing." });
+    }
+
+    try {
+        const songData = await NoteScraper(url);
+
+        if (!songData.title || !songData.author || !songData.notes) {
+            return response.status(400).send({ message: "Error: Failed to scrape song information." });
+        }
+
+        return response.status(201).send(songData);
+    } 
+    catch (error) {
+        console.error(error.message);
+        response.status(500).send({ message: "Error: Failed to scrape the song from the URL." });
+    }
+});
+
 
 export default router;
