@@ -26,7 +26,7 @@ const CardView = ({ songs }) => {
     const updatedFavoriteStatus = !song.favorited; 
 
     try {
-      axios.put(`http://localhost:5988/songs/${song._id}`, {
+      axios.put(`http://localhost:5988/songs/favorite/${song._id}`, {
         ...song,
         favorited: updatedFavoriteStatus,
       });

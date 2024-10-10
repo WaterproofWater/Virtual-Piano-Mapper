@@ -60,7 +60,7 @@ router.get("/:id", async (request, response) => {  // URL for song list: http://
     }
 });
 
-// Route to update/overwrite a song's note print in the DB
+// Route to update/overwrite a song's note map in the DB
 router.put("/:id", async (request, response) => {
     try {
         if (!request.body.title || !request.body.author || !request.body.notes) {
@@ -87,7 +87,7 @@ router.put("/:id", async (request, response) => {
 });
 
 // Route to favorite/unfavorite a song
-router.put('/songs/:id', async (req, res) => {  // URL for song list: http://localhost:5988/songs
+router.put('/favorite/:id', async (req, res) => {  // URL for song list: http://localhost:5988/songs
     try {
       const song = await Song.findByIdAndUpdate(req.params.id, req.body, { new: true });
       res.json(song);
@@ -96,7 +96,26 @@ router.put('/songs/:id', async (req, res) => {  // URL for song list: http://loc
       res.status(500).json({ message: 'Error: Favorite status update failed to update.' });
     }
   });
-  
+
+// Route to update keymap and delay for a song
+  router.put("/songmap/:id", async (req, res) => {
+    try {
+        const updatedSong = await Song.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+        if (!updatedSong) {
+            return res.status(404).json({ message: "Song not found." });
+        }
+
+        res.status(200).json(updatedSong); 
+    } 
+    catch (error) {
+        if (error.name === "CastError") {
+            return res.status(400).json({ message: "Error: Invalid song ID format." });
+        }
+        console.log(error.message);
+        res.status(500).send({ message: error.message });
+    }
+});
 
 // Route to deleted a target song in the DB
 router.delete("/:id", async (request, response) => {  // URL for song list: http://localhost:5988/songs

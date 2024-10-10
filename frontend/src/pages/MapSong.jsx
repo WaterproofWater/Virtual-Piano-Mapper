@@ -7,7 +7,7 @@ import { useSnackbar } from 'notistack';
 import { MdMusicNote } from 'react-icons/md';
 import { BiUserCircle } from 'react-icons/bi';
 import pianoKeys from '../components/images/piano-keys.png';
-import ScriptModal from '../components/mapper/ScriptModal';
+import ScriptModal from '../components/modals/ScriptModal';
 import ScriptGenerator from '../../../backend/services/ScriptGenerator';
 
 const MapSong = () => {
@@ -47,10 +47,11 @@ const MapSong = () => {
     axios
       .get(`http://localhost:5988/songs/${id}`)
       .then((response) => {
-        const { title, author, notes, keyMap } = response.data;
+        const { title, author, notes, keyMap, delay } = response.data;
         setTitle(title);
         setAuthor(author);
         setNotes(notes);
+        setDelay(delay);
         if (keyMap) {
           setKeyMap(keyMap);
         }
@@ -173,12 +174,20 @@ const MapSong = () => {
   // Create AHK Script using a modal section
   const handleSubmit = (event) => {
     event.preventDefault();
+    
     const mapData = { notes, keyMap, startKey, stopKey, delay };
     const AHKScript = ScriptGenerator(mapData);
-  
-    const songData = { title, author, notes, keyMap};
-  
-    axios.put(`http://localhost:5988/songs/${id}`, songData);
+    const songData = { keyMap, delay };
+
+    axios.put(`http://localhost:5988/songs/songmap/${id}`, songData)
+      .then(() => {
+        enqueueSnackbar("Keybinds and delay saved successfully!", { variant: "success" });
+      })
+      .catch((error) => {
+        console.error("Error saving keyMap and delay:", error);
+        enqueueSnackbar("Error: Failed to save keybinds. Please check console!", { variant: "error" });
+      });
+
     openModal({ ...songData, AHKScript });
   };
 

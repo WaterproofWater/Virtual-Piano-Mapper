@@ -22,6 +22,10 @@ const songSchema = mongoose.Schema(
         type: Boolean,
         default: false, 
       },
+      delay: {
+        type: Number,
+        default: 150, 
+      },
     },
     {
       timestamps: true,

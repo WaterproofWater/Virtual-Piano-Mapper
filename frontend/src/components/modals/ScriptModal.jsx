@@ -9,7 +9,7 @@ const ScriptModal = ({ song, onClose }) => {
   
   const copyToClipboard = () => {
     navigator.clipboard.writeText(song.AHKScript);
-    enqueueSnackbar("Song notes has copied to clipboard!", { variant: "success" });
+    enqueueSnackbar("Song notes copied to clipboard successfully!", { variant: "success" });
   };
 
   return (
