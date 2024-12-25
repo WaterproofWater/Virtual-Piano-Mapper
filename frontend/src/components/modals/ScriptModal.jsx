@@ -5,6 +5,7 @@ import { BiUserCircle } from 'react-icons/bi';
 import { useSnackbar } from 'notistack';
 
 const ScriptModal = ({ song, onClose }) => {
+
   const { enqueueSnackbar } = useSnackbar();
   
   const copyToClipboard = () => {

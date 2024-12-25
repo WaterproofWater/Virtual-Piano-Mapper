@@ -35,6 +35,8 @@ const MapSong = () => {
   // ScriptModal section
   const openModal = (song) => {
     setActiveSong(song);
+    // console.log(title);
+    // console.log(author);
   };
 
   const closeModal = () => {
@@ -177,7 +179,7 @@ const MapSong = () => {
     
     const mapData = { notes, keyMap, startKey, stopKey, delay };
     const AHKScript = ScriptGenerator(mapData);
-    const songData = { keyMap, delay };
+    const songData = { keyMap, delay, author, title };
 
     axios.put(`http://localhost:5988/songs/songmap/${id}`, songData)
       .then(() => {
@@ -188,7 +190,7 @@ const MapSong = () => {
         enqueueSnackbar("Error: Failed to save keybinds. Please check console!", { variant: "error" });
       });
 
-    openModal({ ...songData, AHKScript });
+      openModal({ ...songData, AHKScript });
   };
 
   // Page layout section
