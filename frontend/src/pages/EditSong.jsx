@@ -90,7 +90,7 @@ const EditSong = () => {
           />
         </div>
 
-        <div className='my-4'>
+        {/* <div className='my-4'>
           <label className='text-xl mr-4 text-gray-700'> Favorited </label>
           <input
             type='checkbox'
@@ -98,9 +98,9 @@ const EditSong = () => {
             onChange={() => setFavorited(!favorited)}
             className='border-2 border-gray-500 px-4 py-2'
           />
-        </div>
+        </div> */}
 
-        <button className='p-2 bg-blue-600 m-8 text-white transition' onClick={handleEditSong}>
+        <button className='p-2 bg-blue-600 m-8 text-white transition rounded-full hover:bg-blue-700 transition' onClick={handleEditSong}>
           Save
         </button>
       </div>
