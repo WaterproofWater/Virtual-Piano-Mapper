@@ -35,8 +35,6 @@ const MapSong = () => {
   // ScriptModal section
   const openModal = (song) => {
     setActiveSong(song);
-    // console.log(title);
-    // console.log(author);
   };
 
   const closeModal = () => {
