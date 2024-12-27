@@ -3,7 +3,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { useSnackbar } from 'notistack';
 import axios from 'axios';
 
-const URLModal = ({ onClose }) => {
+const URLModal = ({ onClose, onScrapeComplete }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [url, setUrl] = useState('');
   const [isSearching, setIsSearching] = useState(false);
@@ -14,17 +14,21 @@ const URLModal = ({ onClose }) => {
       enqueueSnackbar("Please enter a valid URL!", { variant: "warning" });
       return;
     }
-  
+
     try {
       setIsSearching(true);
       const response = await axios.post('http://localhost:5988/songs/scrape', { url });
 
       if (response.status === 201) {
-        console.log("PRINT IN URL MODAL LIKE 23: ", response.data);
+        const scrapedData = response.data;
+        console.log("Scraped Data: ", scrapedData);
         enqueueSnackbar("Song's data scraped and loaded successfully!", { variant: "success" });
+
+        if (onScrapeComplete) {
+          onScrapeComplete(scrapedData);
+        }
         onClose();
-      } 
-      else {
+      } else {
         enqueueSnackbar("Failed to scrape song info.", { variant: "error" });
         setIsSearching(false);
       }
@@ -39,13 +43,12 @@ const URLModal = ({ onClose }) => {
     if (isSearching) {
       const interval = setInterval(() => {
         setDots((prevDots) => (prevDots.length < 5 ? prevDots + ". " : ""));
-      }, 500); 
+      }, 500);
       return () => clearInterval(interval);
     } else {
       setDots("");
     }
   }, [isSearching]);
-
 
   return (
     <div
@@ -72,13 +75,13 @@ const URLModal = ({ onClose }) => {
         />
 
         <div className='flex items-center justify-center'>
-        <button
-          className={`bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition mt-4`}
-          onClick={handleURLSubmit}
-          disabled={isSearching}
-        >
-          {isSearching ? `Searching${dots}` : "Search"}
-        </button>
+          <button
+            className={`bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition mt-4`}
+            onClick={handleURLSubmit}
+            disabled={isSearching}
+          >
+            {isSearching ? `Searching${dots}` : "Search"}
+          </button>
         </div>
       </div>
     </div>
