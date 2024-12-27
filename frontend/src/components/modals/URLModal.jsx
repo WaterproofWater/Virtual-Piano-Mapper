@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useSnackbar } from 'notistack';
 import axios from 'axios';
@@ -6,6 +6,8 @@ import axios from 'axios';
 const URLModal = ({ onClose }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [url, setUrl] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [dots, setDots] = useState("");
 
   const handleURLSubmit = async () => {
     if (!url) {
@@ -14,6 +16,7 @@ const URLModal = ({ onClose }) => {
     }
   
     try {
+      setIsSearching(true);
       const response = await axios.post('http://localhost:5988/songs/scrape', { url });
 
       if (response.status === 201) {
@@ -29,6 +32,18 @@ const URLModal = ({ onClose }) => {
       console.error('Error:', error);
     }
   };
+
+  useEffect(() => {
+    if (isSearching) {
+      const interval = setInterval(() => {
+        setDots((prevDots) => (prevDots.length < 5 ? prevDots + ". " : ""));
+      }, 500); 
+      return () => clearInterval(interval);
+    } else {
+      setDots("");
+    }
+  }, [isSearching]);
+
 
   return (
     <div
@@ -55,12 +70,13 @@ const URLModal = ({ onClose }) => {
         />
 
         <div className='flex items-center justify-center'>
-          <button
-            className={`bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition mt-4`}
-            onClick={handleURLSubmit}
-          >
-            Search
-          </button>
+        <button
+          className={`bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition mt-4`}
+          onClick={handleURLSubmit}
+          disabled={isSearching} // Optional: Disable button during search
+        >
+          {isSearching ? `Searching${dots}` : "Search"}
+        </button>
         </div>
       </div>
     </div>
