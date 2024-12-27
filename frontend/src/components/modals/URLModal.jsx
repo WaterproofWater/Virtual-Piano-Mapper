@@ -20,15 +20,17 @@ const URLModal = ({ onClose }) => {
       const response = await axios.post('http://localhost:5988/songs/scrape', { url });
 
       if (response.status === 201) {
-        console.log(response.data);
+        console.log("PRINT IN URL MODAL LIKE 23: ", response.data);
         enqueueSnackbar("Song's data scraped and loaded successfully!", { variant: "success" });
         onClose();
       } 
       else {
         enqueueSnackbar("Failed to scrape song info.", { variant: "error" });
+        setIsSearching(false);
       }
     } catch (error) {
       enqueueSnackbar("Error scraping song info.", { variant: "error" });
+      setIsSearching(false);
       console.error('Error:', error);
     }
   };
@@ -73,7 +75,7 @@ const URLModal = ({ onClose }) => {
         <button
           className={`bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition mt-4`}
           onClick={handleURLSubmit}
-          disabled={isSearching} // Optional: Disable button during search
+          disabled={isSearching}
         >
           {isSearching ? `Searching${dots}` : "Search"}
         </button>
