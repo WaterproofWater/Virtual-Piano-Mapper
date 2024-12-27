@@ -15,7 +15,7 @@ const SongModal = ({ song, onClose }) => {
         onClick={(event) => event.stopPropagation()}
       >
         <AiOutlineClose
-          className='absolute right-6 top-6 text-3xl text-red-600 hover:text-red-700 cursor-pointer'
+          className='absolute right-6 top-6 text-3xl text-red-600 hover:text-red-700 transition cursor-pointer'
           onClick={onClose}
         />
         

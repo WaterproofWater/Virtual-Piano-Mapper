@@ -4,7 +4,7 @@ import { AiOutlineEdit, AiOutlineStar, AiFillStar } from 'react-icons/ai';
 import { BsInfoCircle } from 'react-icons/bs';
 import { BiUserCircle, BiShow } from 'react-icons/bi';
 import { MdOutlineDelete, MdMusicNote } from 'react-icons/md';
-import SongModal from './SongModal';
+import SongModal from '../modals/SongModal';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 

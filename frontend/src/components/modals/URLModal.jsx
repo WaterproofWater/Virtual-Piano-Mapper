@@ -36,11 +36,11 @@ const URLModal = ({ onClose }) => {
       onClick={onClose}
     >
       <div
-        className='w-[600px] max-w-full h-auto bg-white rounded-xl p-4 flex flex-col relative overflow-y-auto'
+        className='w-[600px] max-w-full h-auto bg-white rounded-xl p-5 flex flex-col relative overflow-y-auto'
         onClick={(event) => event.stopPropagation()}
       >
         <AiOutlineClose
-          className='absolute right-6 top-6 text-3xl text-red-600 cursor-pointer'
+          className='absolute right-6 top-6 text-3xl text-red-600 hover:text-red-700 transition cursor-pointer'
           onClick={onClose}
         />
 
@@ -50,13 +50,13 @@ const URLModal = ({ onClose }) => {
           type='text'
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          className='border-2 border-gray-500 px-4 py-2 w-full mb-4'
+          className='border-2 border-gray-500 px-4 py-2 w-full mb-1'
           placeholder="Enter URL here"
         />
 
-        <div className='flex items-center justify-center mb-5'>
+        <div className='flex items-center justify-center'>
           <button
-            className={`bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 m-1`}
+            className={`bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition mt-4`}
             onClick={handleURLSubmit}
           >
             Search

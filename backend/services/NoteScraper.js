@@ -7,6 +7,10 @@ export const NoteScraper = async (url) => {
     const page = await browser.newPage();
     await page.goto(url);
 
+    
+
+
+
     await browser.close();
 
     // Test data
@@ -17,7 +21,8 @@ export const NoteScraper = async (url) => {
     };
 
     return songData;
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error scraping song:', error);
     throw new Error('Error scraping the song');
   }
