@@ -1,22 +1,6 @@
 const ScriptGenerator = (data) => {
     const { notes, keyMap, startKey, stopKey, delay} = data;
-    const consecutiveDelay = Math.round(delay * 0.95);
-    const specialCharacters = [
-        '`',
-        "'",
-        '"',
-        ',',
-        ';',
-        ':',
-        '+',
-        '-',
-        '.',
-        '/',
-        '\\',
-        ' ',
-        '^',
-        '%' 
-    ];
+    const consecutiveDelay = Math.round(delay * 0.8);
 
     let script = `*${stopKey}:: 
     Reload 
@@ -159,49 +143,67 @@ const ScriptGenerator = (data) => {
         mergedFinalLine += line;
     }
 
-    // Main mapping logic
-    for (let i = 0; i < mergedFinalLine.length; i++) {
-        const char = mergedFinalLine[i];
-
-        if (char === '-') {
-            waitTime += delay;
-            continue;
-        }
-
-        else if (char === '*') {
-            script += `    sleep, ${consecutiveDelay}\n`;
-        }
-
-        else {
-            const note = char;                      // The current character is the note
-            const octave = mergedFinalLine[i + 1];  // The next character is the octave
-
-            const noteKey = `${note}${octave}`;
-            const mappedKey = keyMap[noteKey];
-
-            if (mappedKey) {
-                if (waitTime > 0) {
-                    script += `    sleep, ${waitTime}\n`;
-                    waitTime = 0;
-                }
-
-                if (specialCharacters.includes(mappedKey)) {
-                    console.log(mappedKey);
-                    script += `    send, {\`${mappedKey}}\n`;
-                } 
-                else {
-                    script += `    send, {${mappedKey}}\n`;
-                }
-            }
-            // else {
-            //     console.log(`Note ${noteKey} not found in keyMap`);
-            // }
-
-            // Skip the octave character since it was just processed
-            i += 1; 
-
+// Helper function to escape backtick and percent characters
+function escapeSpecialCharacters(input) {
+    let escapedString = "";
+    for (const char of input) {
+        if (char === '`' || char === '%') {
+            escapedString += `\`${char}`;
+        } else {
+            escapedString += char;
         }
     }
+    return escapedString;
+}
+
+// Main mapping logic
+let notesGroup = "";
+for (let i = 0; i < mergedFinalLine.length; i++) {
+    const char = mergedFinalLine[i];
+
+    if (char === '-') {
+        if (notesGroup !== "") {
+            const escapedNotesGroup = escapeSpecialCharacters(notesGroup);
+            script += `    SendRaw ${escapedNotesGroup}\n`;
+        }
+        notesGroup = "";
+        waitTime += delay;
+        continue;
+    } 
+    else if (char === '*') {
+        if (notesGroup !== "") {
+            const escapedNotesGroup = escapeSpecialCharacters(notesGroup);
+            script += `    SendRaw ${escapedNotesGroup}\n`;
+        }
+        notesGroup = "";
+        script += `    Sleep ${consecutiveDelay}\n`;
+    } 
+    else {
+        const note = char;                      // Current character is the note
+        const octave = mergedFinalLine[i + 1];  // Next character is the octave
+
+        const noteKey = `${note}${octave}`;
+        const mappedKey = keyMap[noteKey];
+
+        if (mappedKey) {
+            notesGroup += mappedKey;
+
+            if (waitTime > 0) {
+                script += `    Sleep ${waitTime}\n`;
+                waitTime = 0;
+            }
+        }
+
+        i += 1;
+    }
+}
+
+// Final flush of notesGroup (if it isn't empty)
+if (notesGroup !== "") {
+    const escapedNotesGroup = escapeSpecialCharacters(notesGroup);
+    script += `    SendRaw ${escapedNotesGroup}\n`;
+}
+
     
     script += `    reload
     return`;

@@ -28,12 +28,14 @@ const URLModal = ({ onClose, onScrapeComplete }) => {
           onScrapeComplete(scrapedData);
         }
         onClose();
-      } else {
+      } 
+      else {
         enqueueSnackbar("Failed to scrape song info.", { variant: "error" });
         setIsSearching(false);
       }
-    } catch (error) {
-      enqueueSnackbar("Error scraping song info.", { variant: "error" });
+    } 
+    catch (error) {
+      enqueueSnackbar("Error scraping song info (invalid URL)", { variant: "error" });
       setIsSearching(false);
       console.error('Error:', error);
     }
