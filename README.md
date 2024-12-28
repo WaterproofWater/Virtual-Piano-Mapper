@@ -19,8 +19,9 @@ placeholder text
 10. The program uses songs' note map from __https://pianoletternotes.blogspot.com/__ to generate the AHK script.
 11. Map to AHK script by clicking on the eye icon located at the bottom left of each song's card and then click the "Map Song to Piano" button.
 12. Fill out the necessary key binds* and customize the delay if needed (lower delay = faster playback).
-13. Copy the outputted AHK script generated and paste the resulting code into an editor to run AHK on.
-14. Run the AHK script on a virtual piano program of your choice (__https://virtualpiano.net/__ is recommended as it has the most keys).
+13. Create an AHK script file (on Windows 11: right click -> New -> AutoHotKey Script) and open the said file with your chosen IDE.
+14. Copy the generated AHK code and paste it into the IDE that opens your AHK script file.
+15. Run the AHK script on a virtual piano program of your choice (__https://virtualpiano.net/__ is recommended as it has the most key-bindable piano keys).
 
 *(if you use the __https://virtualpiano.net/__ piano, you can paste the entire key bind in one go, it is "__1!2@34$5%6^78\*9(0qQwWeErtTyYuiIoOpPasSdDfgGhHjJklLzZxcCvVbBnm__")
 
