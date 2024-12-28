@@ -8,7 +8,7 @@ const MONGO_DB_URL = "mongodb+srv://root:rootpass@song-notes-db.lp1nq.mongodb.ne
 const app = express();
 
 // Start: npm run dev
-// Stop: Hold Ctrl and then C
+// Stop: Hold Ctrl and then press C
 
 app.use(express.json());
 app.use(cors());
